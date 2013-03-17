@@ -12,9 +12,18 @@
 @interface CardGameViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *flipLabel;
 @property (nonatomic) int flipCount;
+@property (strong, nonatomic) Deck *deck;
 @end
 
 @implementation CardGameViewController
+
+- (Deck *) deck {
+    if (!_deck) {
+        _deck = [[PlayingCardDeck alloc] init];
+    }
+    
+    return _deck;
+}
 
 - (void) setFlipCount:(int)flipCount {
     _flipCount = flipCount;
@@ -22,8 +31,7 @@
 }
 
 - (IBAction)flipCard:(UIButton *)sender {
-    PlayingCardDeck *playingCardDeck = [[PlayingCardDeck alloc] init];
-    Card *card = [playingCardDeck drawRamdonCard];
+    Card *card = [self.deck drawRamdonCard];
                                 
     if (!sender.selected) {
         self.flipCount++;
