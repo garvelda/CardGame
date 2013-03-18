@@ -15,4 +15,5 @@
 - (void) flipCardAtIndex:(NSUInteger)index;
 - (Card *) cardAtIndex:(NSUInteger)index;
 @property (nonatomic,readonly) NSUInteger score;
+@property (nonatomic, readonly) NSString *matching;
 @end

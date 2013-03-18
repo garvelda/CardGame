@@ -36,6 +36,7 @@
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
         
         NSLog(@"score: %d", [self.game score]);
+        self.matchingLabel.text = [self.game matching];
         self.scoresLabel.text = [NSString stringWithFormat:@"Scores: %d", [self.game score]];
     }
 }
@@ -48,6 +49,12 @@
 - (void) setFlipCount:(int)flipCount {
     _flipCount = flipCount;
     self.flipLabel.text = [NSString stringWithFormat:@"Flips: %d", flipCount];
+}
+
+- (IBAction)dealPressed:(UIButton *)sender {
+    self.game = nil;
+    self.flipCount = 0;
+    [self updateUI];
 }
 
 - (IBAction)flipCard:(UIButton *)sender {
