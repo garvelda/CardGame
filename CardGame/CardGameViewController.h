@@ -9,4 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface CardGameViewController : UIViewController
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+@property (weak, nonatomic) IBOutlet UILabel *scoresLabel;
 @end
