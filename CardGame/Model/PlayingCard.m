@@ -39,10 +39,25 @@
         PlayingCard *otherCard = [otherCards lastObject];
         
         if ([self.suit isEqualToString:otherCard.suit]) {
-            score = 1;
+            score += 1;
         } else if (self.rank == otherCard.rank) {
-            score = 4;
+            score += 4;
         }
+    } else if (otherCards.count == 2) {
+        PlayingCard *otherCard1 = otherCards[0];
+        PlayingCard *otherCard2 = otherCards[1];
+        
+        if (self.rank == otherCard1.rank && self.rank == otherCard2.rank) {
+            score += 8;
+        } else if (self.rank == otherCard1.rank || self.rank == otherCard2.rank || otherCard1.rank == otherCard2.rank) {
+            score += 4;
+        }
+        
+        if ([self.suit isEqualToString:otherCard1.suit] && [self.suit isEqualToString:otherCard2.suit]) {
+            score += 4;
+        } else if ([self.suit isEqualToString:otherCard1.suit] || [self.suit isEqualToString:otherCard2.suit] || [otherCard1.suit isEqualToString:otherCard2.suit]) {
+            score += 1;
+        } 
     }
     
     return score;

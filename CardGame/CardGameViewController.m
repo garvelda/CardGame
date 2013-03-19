@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *flipLabel;
 @property (nonatomic) int flipCount;
 @property (strong, nonatomic) CardMatchingGame *game;
+@property (nonatomic) BOOL gameStarted;
 @end
 
 @implementation CardGameViewController
@@ -34,10 +35,9 @@
         cardButton.selected = card.isFaceUp;
         cardButton.enabled = !card.isUnplayable;
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
-        
-        NSLog(@"score: %d", [self.game score]);
         self.matchingLabel.text = [self.game matching];
         self.scoresLabel.text = [NSString stringWithFormat:@"Scores: %d", [self.game score]];
+        self.numberOfCardsToPlay.enabled = !self.gameStarted;
     }
 }
 
@@ -54,11 +54,18 @@
 - (IBAction)dealPressed:(UIButton *)sender {
     self.game = nil;
     self.flipCount = 0;
+    self.gameStarted = NO;
     [self updateUI];
 }
 
 - (IBAction)flipCard:(UIButton *)sender {
-    [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
+    self.gameStarted = YES;
+    
+    if (self.numberOfCardsToPlay.selectedSegmentIndex == 0) {
+        [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender] withNumberOfMatchingCards:1];
+    } else {
+        [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender] withNumberOfMatchingCards:2];
+    }
     
     if (!sender.selected) {
         self.flipCount++;

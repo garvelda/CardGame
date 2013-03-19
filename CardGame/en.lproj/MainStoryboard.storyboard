@@ -388,6 +388,7 @@
                     <connections>
                         <outlet property="flipLabel" destination="eFf-5N-7yh" id="jx3-V7-1Xk"/>
                         <outlet property="matchingLabel" destination="WGN-rh-Kds" id="HDe-E8-sp7"/>
+                        <outlet property="numberOfCardsToPlay" destination="Ukl-hm-lTI" id="xct-Nz-EMI"/>
                         <outlet property="scoresLabel" destination="UOp-D2-3hs" id="QbX-5z-T3y"/>
                         <outletCollection property="cardButtons" destination="eIE-Cc-oxU" id="zGa-Ht-cs3"/>
                         <outletCollection property="cardButtons" destination="dus-Xo-PRK" id="bHC-dv-aOC"/>
@@ -420,6 +421,7 @@
                 <relationship kind="action" name="flipCard:" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="flipLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="matchingLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="numberOfCardsToPlay" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="scoresLabel" candidateClass="UILabel"/>
                 <relationship kind="outletCollection" name="cardButtons" candidateClass="UIButton"/>
             </relationships>
