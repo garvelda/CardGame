@@ -15,6 +15,7 @@
 @property (nonatomic) int flipCount;
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (nonatomic) BOOL gameStarted;
+@property (nonatomic) NSUInteger lastScore;
 @end
 
 @implementation CardGameViewController
@@ -35,10 +36,46 @@
         cardButton.selected = card.isFaceUp;
         cardButton.enabled = !card.isUnplayable;
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
-        self.matchingLabel.text = [self.game matching];
-        self.scoresLabel.text = [NSString stringWithFormat:@"Scores: %d", [self.game score]];
-        self.numberOfCardsToPlay.enabled = !self.gameStarted;
     }
+    
+    NSString *matchingString = @"Last flip: ";
+    
+    if (self.game.cardsPlayed) {
+        if (self.game.cardsPlayed.count == 1) {
+            matchingString = [matchingString stringByAppendingString:[[self.game.cardsPlayed lastObject] contents]];
+        } else {
+            if ((self.numberOfCardsToPlay.selectedSegmentIndex == 0 && self.game.cardsPlayed.count == 2) || (self.numberOfCardsToPlay.selectedSegmentIndex == 1 && self.game.cardsPlayed.count == 3)) {
+                int points = self.game.score - self.lastScore;
+                
+                if (points >= 0) {
+                    matchingString = [matchingString stringByAppendingString:@" Matched "];
+                    
+                    for (Card *card in self.game.cardsPlayed) {
+                        matchingString = [matchingString stringByAppendingFormat:@"%@ ", [card contents]];
+                    }
+                    
+                    matchingString = [matchingString stringByAppendingFormat:@"for %d points", points];
+                } else {
+                    matchingString = [matchingString stringByAppendingString:@" Didn't match "];
+                    
+                    for (Card *card in self.game.cardsPlayed) {
+                        matchingString = [matchingString stringByAppendingFormat:@"%@ ", [card contents]];
+                    }
+                }
+                
+                self.lastScore = self.game.score;
+            } else {
+                for (Card *card in self.game.cardsPlayed) {
+                    matchingString = [matchingString stringByAppendingFormat:@"%@ ", [card contents]];
+                }
+            }
+
+        }
+    }
+    
+    self.matchingLabel.text = matchingString;
+    self.scoresLabel.text = [NSString stringWithFormat:@"Scores: %d", self.game.score];
+    self.numberOfCardsToPlay.enabled = !self.gameStarted;
 }
 
 - (void) setCardButtons:(NSArray *)cardButtons {
