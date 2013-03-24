@@ -9,6 +9,7 @@
 #import "CardGameViewController.h"
 #import "PlayingCardDeck.h"
 #import "CardMatchingGame.h"
+#import "GameResult.h"
 
 @interface CardGameViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *flipLabel;
@@ -16,9 +17,18 @@
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (nonatomic) BOOL gameStarted;
 @property (nonatomic) NSUInteger lastScore;
+@property (strong, nonatomic) GameResult *gameResult;
 @end
 
 @implementation CardGameViewController
+
+- (GameResult *) gameResult {
+    if (!_gameResult) {
+        _gameResult = [[GameResult alloc] init];
+    }
+    
+    return _gameResult;
+}
 
 - (CardMatchingGame *) game {
     if (!_game) {
@@ -90,6 +100,7 @@
 
 - (IBAction)dealPressed:(UIButton *)sender {
     self.game = nil;
+    self.gameResult = nil;
     self.flipCount = 0;
     self.gameStarted = NO;
     [self updateUI];
@@ -108,6 +119,7 @@
         self.flipCount++;
     }
     
+    self.gameResult.score = self.game.score;
     [self updateUI];
 }
 
