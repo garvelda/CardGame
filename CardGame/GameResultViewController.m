@@ -9,10 +9,25 @@
 #import "GameResultViewController.h"
 
 @interface GameResultViewController ()
-
+@property (nonatomic) SEL sortSelector;
 @end
 
 @implementation GameResultViewController
+
+@synthesize sortSelector = _sortSelector;
+
+- (SEL) sortSelector {
+    if (!_sortSelector) {
+        _sortSelector = @selector(compareByDate:);
+    }
+    
+    return _sortSelector;
+}
+
+- (void) setSortSelector:(SEL)sortSelector {
+    _sortSelector = sortSelector;
+    [self updateUI];
+}
 
 - (void) setup {
 }
@@ -25,7 +40,7 @@
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     [formatter setLocale:locale];
     
-    for (GameResult *gameResult in [GameResult allGameResults]) {
+    for (GameResult *gameResult in [[GameResult allGameResults] sortedArrayUsingSelector:self.sortSelector]) {
         displayText = [displayText stringByAppendingFormat:@"Score: %d day: %@ duration: %gs \n", gameResult.score, [formatter stringFromDate:gameResult.start], round(gameResult.duration)];
     }
     
@@ -55,27 +70,16 @@
 	// Do any additional setup after loading the view.
 }
 
-#define BY_DATE_CRITERIA 0
-#define BY_SCORE_CRITERIA 1
-#define BY_DURATION_CRITERIA 2 
-
-- (void) orderByCriteria:(int)criteria {
-    if (criteria == BY_DATE_CRITERIA) {
-    } else if (criteria == BY_SCORE_CRITERIA) {
-    } else if (criteria == BY_DURATION_CRITERIA) {
-    }
-}
-
 - (IBAction)orderByDate:(UIButton *)sender {
-    [self orderByCriteria:BY_DATE_CRITERIA];
+    self.sortSelector = @selector(compareByDate:);
 }
 
 - (IBAction)ordeByScore:(UIButton *)sender {
-    [self orderByCriteria:BY_SCORE_CRITERIA];
+    self.sortSelector = @selector(compareByScore:);
 }
 
 - (IBAction)orderByDuration:(UIButton *)sender {
-    [self orderByCriteria:BY_DURATION_CRITERIA];
+    self.sortSelector = @selector(compareByDuration:);
 }
 
 @end
