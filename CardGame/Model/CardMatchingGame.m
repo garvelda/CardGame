@@ -47,7 +47,7 @@
 #define MISMATCH_PENALTY 1;
 #define FLIP_COST 1;
 
-- (void) flipCardAtIndex:(NSUInteger)index withNumberOfMatchingCards:(NSUInteger)numberOfCards {
+- (void) flipCardAtIndex:(NSUInteger)index {
     Card *card = [self cardAtIndex:index];
     NSMutableArray *cardsFaceUpFound = [[NSMutableArray alloc] init];
     
@@ -57,7 +57,7 @@
                 if (otherCard.isFaceUp && !otherCard.isUnplayable) {
                     [cardsFaceUpFound addObject:otherCard];
                     
-                    if (cardsFaceUpFound.count == numberOfCards) {
+                    if (cardsFaceUpFound.count == 1) {
                         int matchScore = [card match:[cardsFaceUpFound copy]];
                         
                         if (matchScore) {
@@ -79,7 +79,7 @@
                 }
             }
 
-            if (cardsFaceUpFound.count != numberOfCards) {
+            if (cardsFaceUpFound.count != 1) {
                 self.score -= FLIP_COST;
             }
             

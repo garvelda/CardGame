@@ -54,7 +54,7 @@
         if (self.game.cardsPlayed.count == 1) {
             matchingString = [matchingString stringByAppendingString:[[self.game.cardsPlayed lastObject] contents]];
         } else {
-            if ((self.numberOfCardsToPlay.selectedSegmentIndex == 0 && self.game.cardsPlayed.count == 2) || (self.numberOfCardsToPlay.selectedSegmentIndex == 1 && self.game.cardsPlayed.count == 3)) {
+            if (self.game.cardsPlayed.count == 2) {
                 int points = self.game.score - self.lastScore;
                 
                 if (points >= 0) {
@@ -83,9 +83,7 @@
         }
     }
     
-    self.matchingLabel.text = matchingString;
     self.scoresLabel.text = [NSString stringWithFormat:@"Scores: %d", self.game.score];
-    self.numberOfCardsToPlay.enabled = !self.gameStarted;
 }
 
 - (void) setCardButtons:(NSArray *)cardButtons {
@@ -108,12 +106,7 @@
 
 - (IBAction)flipCard:(UIButton *)sender {
     self.gameStarted = YES;
-    
-    if (self.numberOfCardsToPlay.selectedSegmentIndex == 0) {
-        [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender] withNumberOfMatchingCards:1];
-    } else {
-        [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender] withNumberOfMatchingCards:2];
-    }
+    [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
     
     if (!sender.selected) {
         self.flipCount++;

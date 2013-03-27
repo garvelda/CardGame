@@ -12,7 +12,7 @@
 
 @interface CardMatchingGame : NSObject
 - (id) initWithCardCount:(NSUInteger)count usingDeck:(Deck*) deck;
-- (void) flipCardAtIndex:(NSUInteger)index withNumberOfMatchingCards:(NSUInteger)numberOfCards;
+- (void) flipCardAtIndex:(NSUInteger)index;
 - (Card *) cardAtIndex:(NSUInteger)index;
 @property (nonatomic, readonly) NSUInteger score;
 @property (nonatomic, readonly) NSArray *cardsPlayed;
