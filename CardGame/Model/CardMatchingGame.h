@@ -7,13 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Deck.h"
-#import "Card.h"
+#import "CardGame.h"
 
-@interface CardMatchingGame : NSObject
-- (id) initWithCardCount:(NSUInteger)count usingDeck:(Deck*) deck;
-- (void) flipCardAtIndex:(NSUInteger)index;
-- (Card *) cardAtIndex:(NSUInteger)index;
-@property (nonatomic, readonly) NSUInteger score;
-@property (nonatomic, readonly) NSArray *cardsPlayed;
+@interface CardMatchingGame : CardGame
 @end

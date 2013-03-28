@@ -1,25 +1,25 @@
 //
-//  CardGameViewController.m
+//  SetGameViewController.m
 //  CardGame
 //
-//  Created by David Eleazar García Santiago on 17/03/13.
+//  Created by David Eleazar García Santiago on 28/03/13.
 //  Copyright (c) 2013 David Eleazar García Santiago. All rights reserved.
 //
 
-#import "CardGameViewController.h"
-#import "CardMatchingGame.h"
-#import "PlayingCardDeck.h"
+#import "SetGameViewController.h"
+#import "CardSetGame.h"
+#import "SetCardDeck.h"
 
-@interface CardGameViewController ()
-@property (strong, nonatomic) CardMatchingGame *game;
+@interface SetGameViewController ()
+@property (strong, nonatomic) CardSetGame *game;
 @property (nonatomic) int lastScore;
 @end
 
-@implementation CardGameViewController
+@implementation SetGameViewController
 
 - (CardGame *) game {
     if (!_game) {
-        _game = [[CardMatchingGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[PlayingCardDeck alloc] init]];
+        _game = [[CardSetGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[SetCardDeck alloc] init]];
     }
     
     return _game;
@@ -66,7 +66,7 @@
                     matchingString = [matchingString stringByAppendingFormat:@"%@ ", [card contents]];
                 }
             }
-
+            
         }
     }
     

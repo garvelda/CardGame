@@ -9,12 +9,8 @@
 #import "PlayingCard.h"
 
 @implementation PlayingCard
-@synthesize suit = _suit;
 
-- (NSString *) contents {
-    NSArray *rankStrings = [PlayingCard rankStrings];
-    return [rankStrings[self.rank] stringByAppendingString:self.suit];
-}
+@synthesize suit = _suit;
 
 - (void) setSuit:(NSString *)suit {
     if ([[PlayingCard validSuits] containsObject:suit]) {
@@ -61,6 +57,10 @@
     }
     
     return score;
+}
+
+- (NSString *) contents {
+    return [[PlayingCard rankStrings][self.rank] stringByAppendingString:self.suit];
 }
 
 + (NSArray *) validSuits {
