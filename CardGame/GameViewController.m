@@ -11,7 +11,6 @@
 #import "CardGame.h"
 
 @interface GameViewController ()
-@property (weak, nonatomic) IBOutlet UILabel *flipLabel;
 @property (strong, nonatomic) CardGame *game;
 @property (nonatomic) int flipCount;
 @property (nonatomic) BOOL gameStarted;
@@ -36,7 +35,7 @@
 
 - (void) setFlipCount:(int)flipCount {
     _flipCount = flipCount;
-    self.flipLabel.text = [NSString stringWithFormat:@"Flips: %d", flipCount];
+    self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", flipCount];
 }
 
 - (IBAction)dealPressed:(UIButton *)sender {

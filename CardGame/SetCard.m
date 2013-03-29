@@ -55,7 +55,6 @@
 }
 
 #define SET_FOUND 4
-#define MISMATCH_PENALTY 4
 #define NUMBER_CARDS_IN_SET 3
 
 - (int) match: (NSArray *) otherCards {
@@ -65,19 +64,17 @@
         SetCard *otherCard1 = otherCards[0];
         SetCard *otherCard2 = otherCards[1];
         
-        BOOL validNumberSet = (self.number == otherCard1.number && self.number == otherCard2.number) ||
-        (self.number != otherCard1.number && self.number != otherCard2.number && otherCard1.number != otherCard2.number) ? YES : NO;
-        BOOL validColorSet = ([self.color isEqualToString:otherCard1.color] && [self.color isEqualToString:otherCard2.color]) ||
-        (![self.color isEqualToString:otherCard1.color] && ![self.color isEqualToString:otherCard2.color] && ![otherCard1.color isEqualToString:otherCard2.color]) ? YES : NO;
-        BOOL validSymbolSet = ([self.symbol isEqualToString:otherCard1.symbol] && [self.symbol isEqualToString:otherCard2.symbol]) ||
-        (![self.symbol isEqualToString:otherCard1.symbol] && ![self.symbol isEqualToString:otherCard2.symbol] && ![otherCard1.symbol isEqualToString:otherCard2.symbol]) ? YES : NO;
-        BOOL validShadingSet = ([self.shading isEqualToString:otherCard1.shading] && [self.shading isEqualToString:otherCard2.shading]) ||
-        (![self.shading isEqualToString:otherCard1.shading] && ![self.shading isEqualToString:otherCard2.shading] && ![otherCard1.shading isEqualToString:otherCard2.shading]) ? YES : NO;
-        
-        if (validNumberSet && validColorSet && validSymbolSet && validShadingSet) {
+        BOOL numbersEqual = self.number == otherCard1.number && self.number == otherCard2.number ? YES : NO;
+        BOOL numbersDiffer = self.number != otherCard1.number && self.number != otherCard2.number && otherCard1.number != otherCard2.number ? YES : NO;
+        BOOL colorsEqual = [self.color isEqualToString:otherCard1.color] && [self.color isEqualToString:otherCard2.color] ? YES : NO;
+        BOOL colorsDiffer = ![self.color isEqualToString:otherCard1.color] && ![self.color isEqualToString:otherCard2.color] && ![otherCard1.color isEqualToString:otherCard2.color] ? YES : NO;
+        BOOL symbolsEqual = [self.symbol isEqualToString:otherCard1.symbol] && [self.symbol isEqualToString:otherCard2.symbol] ? YES : NO;
+        BOOL symbolsDiffer = ![self.symbol isEqualToString:otherCard1.symbol] && ![self.symbol isEqualToString:otherCard2.symbol] && ![otherCard1.symbol isEqualToString:otherCard2.symbol] ? YES : NO;
+        BOOL shadingsEqual = [self.shading isEqualToString:otherCard1.shading] && [self.shading isEqualToString:otherCard2.shading] ? YES : NO;
+        BOOL shadingsDiffer = ![self.shading isEqualToString:otherCard1.shading] && ![self.shading isEqualToString:otherCard2.shading] && ![otherCard1.shading isEqualToString:otherCard2.shading] ? YES : NO;
+
+        if ((numbersEqual || numbersDiffer) && (colorsEqual || colorsDiffer) && (symbolsEqual || symbolsDiffer) && (shadingsEqual || shadingsDiffer)) {
             score += SET_FOUND;
-        } else {
-            score -= MISMATCH_PENALTY;
         }
     }
     

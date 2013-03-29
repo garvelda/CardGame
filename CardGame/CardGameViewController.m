@@ -12,7 +12,6 @@
 
 @interface CardGameViewController ()
 @property (strong, nonatomic) CardMatchingGame *game;
-@property (nonatomic) int lastScore;
 @end
 
 @implementation CardGameViewController
@@ -42,16 +41,12 @@
             matchingString = [matchingString stringByAppendingString:[[self.game.cardsPlayed lastObject] contents]];
         } else {
             if (self.game.cardsPlayed.count == 2) {
-                int points = self.game.score - self.lastScore;
-                
-                if (points >= 0) {
+                if (self.game.isMatched) {
                     matchingString = [matchingString stringByAppendingString:@" Matched "];
                     
                     for (Card *card in self.game.cardsPlayed) {
                         matchingString = [matchingString stringByAppendingFormat:@"%@ ", [card contents]];
                     }
-                    
-                    matchingString = [matchingString stringByAppendingFormat:@"for %d points", points];
                 } else {
                     matchingString = [matchingString stringByAppendingString:@" Didn't match "];
                     
@@ -59,8 +54,6 @@
                         matchingString = [matchingString stringByAppendingFormat:@"%@ ", [card contents]];
                     }
                 }
-                
-                self.lastScore = self.game.score;
             } else {
                 for (Card *card in self.game.cardsPlayed) {
                     matchingString = [matchingString stringByAppendingFormat:@"%@ ", [card contents]];
@@ -70,6 +63,7 @@
         }
     }
     
+    self.lastFlipLabel.text = matchingString;
     self.scoresLabel.text = [NSString stringWithFormat:@"Scores: %d", self.game.score];
 }
 

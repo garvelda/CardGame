@@ -12,5 +12,7 @@
 @interface GameViewController : UIViewController
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoresLabel;
+@property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *lastFlipLabel;
 @property (strong, nonatomic) GameResult *gameResult;
 @end

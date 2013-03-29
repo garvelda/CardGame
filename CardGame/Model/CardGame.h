@@ -15,7 +15,7 @@
 - (void) flipCardAtIndex:(NSUInteger)index;
 - (Card *) cardAtIndex:(NSUInteger)index;
 @property (nonatomic, strong) NSMutableArray *cards;
-@property (nonatomic, readonly) NSUInteger numberOfCardsToPlay;
-@property (nonatomic, readonly) NSUInteger score;
 @property (nonatomic, readonly) NSArray *cardsPlayed;
+@property (nonatomic, readonly, getter=isMatched) BOOL matched;
+@property (nonatomic, readonly) int score;
 @end
