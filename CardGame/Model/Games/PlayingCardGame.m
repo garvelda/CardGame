@@ -1,23 +1,23 @@
 //
-//  CardSetGame.m
+//  CardMatchingGame.m
 //  CardGame
 //
-//  Created by David Eleazar García Santiago on 27/03/13.
+//  Created by David Eleazar García Santiago on 18/03/13.
 //  Copyright (c) 2013 David Eleazar García Santiago. All rights reserved.
 //
 
-#import "CardSetGame.h"
+#import "PlayingCardGame.h"
 
-@interface CardSetGame()
+@interface PlayingCardGame()
 @property (nonatomic, readwrite) int score;
 @property (nonatomic, readwrite) NSArray *cardsPlayed;
 @property (nonatomic, readwrite, getter=isMatched) BOOL matched;
 @end
 
-@implementation CardSetGame
+@implementation PlayingCardGame
 
 #define MATCH_BONUS 4
-#define MISMATCH_PENALTY 10
+#define MISMATCH_PENALTY 1
 #define FLIP_COST 1
 
 - (void) flipCardAtIndex:(NSUInteger)index {
@@ -30,13 +30,14 @@
                 if (otherCard.isFaceUp && !otherCard.isUnplayable) {
                     [othercardsFaceUpFound addObject:otherCard];
                     
-                    if (othercardsFaceUpFound.count == 2) {
+                    if (othercardsFaceUpFound.count == 1) {
                         int matchScore = [card match:[othercardsFaceUpFound copy]];
                         
                         if (matchScore) {
                             self.matched = YES;
-                            self.score += matchScore * MATCH_BONUS;
                             card.unplayable = YES;
+                            int points = matchScore * MATCH_BONUS;
+                            self.score += points;
                             
                             for (Card *otherCard in othercardsFaceUpFound) {
                                 otherCard.unplayable = YES;
@@ -44,12 +45,13 @@
                         } else {
                             self.matched = NO;
                             self.score -= MISMATCH_PENALTY;
-                            card.faceUp = YES;
                             
                             for (Card *otherCard in othercardsFaceUpFound) {
                                 otherCard.faceUp = NO;
                             }
                         }
+                    } else {
+                        self.score -= FLIP_COST;
                     }
                 }
             }

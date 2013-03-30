@@ -9,11 +9,11 @@
 #import "Card.h"
 
 @interface SetCard : Card
-@property (nonatomic) NSUInteger number;
+@property (nonatomic) NSUInteger rank;
 @property (nonatomic, strong) NSString *symbol;
 @property (nonatomic, strong) NSString *shading;
 @property (nonatomic, strong) NSString *color;
-+ (NSUInteger) maxNumber;
++ (NSUInteger) maxRank;
 + (NSArray *) validSymbols;
 + (NSArray *) validColors;
 + (NSArray *) validShadings;

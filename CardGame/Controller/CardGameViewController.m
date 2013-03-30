@@ -6,17 +6,17 @@
 //  Copyright (c) 2013 David Eleazar García Santiago. All rights reserved.
 //
 
-#import "GameViewController.h"
+#import "CardGameViewController.h"
 #import "Deck.h"
 #import "CardGame.h"
 
-@interface GameViewController ()
+@interface CardGameViewController ()
 @property (strong, nonatomic) CardGame *game;
 @property (nonatomic) int flipCount;
 @property (nonatomic) BOOL gameStarted;
 @end
 
-@implementation GameViewController
+@implementation CardGameViewController
 
 - (GameResult *) gameResult {
     if (!_gameResult) {

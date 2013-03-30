@@ -8,6 +8,6 @@
 
 #import "CardGame.h"
 
-@interface CardSetGame : CardGame
+@interface SetCardGame : CardGame
 
 @end

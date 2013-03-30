@@ -6,19 +6,19 @@
 //  Copyright (c) 2013 David Eleazar García Santiago. All rights reserved.
 //
 
-#import "CardGameViewController.h"
-#import "CardMatchingGame.h"
+#import "PlayingCardGameViewController.h"
+#import "PlayingCardGame.h"
 #import "PlayingCardDeck.h"
 
-@interface CardGameViewController ()
-@property (strong, nonatomic) CardMatchingGame *game;
+@interface PlayingCardGameViewController ()
+@property (strong, nonatomic) PlayingCardGame *game;
 @end
 
-@implementation CardGameViewController
+@implementation PlayingCardGameViewController
 
 - (CardGame *) game {
     if (!_game) {
-        _game = [[CardMatchingGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[PlayingCardDeck alloc] init]];
+        _game = [[PlayingCardGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[PlayingCardDeck alloc] init]];
     }
     
     return _game;

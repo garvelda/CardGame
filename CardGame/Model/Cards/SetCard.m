@@ -14,9 +14,9 @@
 @synthesize shading = _shading;
 @synthesize color = _color;
 
-- (void) setNumber:(NSUInteger) number {
-    if (number <= [SetCard maxNumber]) {
-        _number = number;
+- (void) setNumber:(NSUInteger) rank {
+    if (rank <= [SetCard maxRank]) {
+        _rank = rank;
     }
 }
 
@@ -51,7 +51,7 @@
 }
 
 - (NSString *) contents {
-    return [NSString stringWithFormat:@"%@|%@|%@|%@", [SetCard numberStrings][self.number], self.symbol, self.color, self.shading];
+    return [NSString stringWithFormat:@"%@|%@|%@|%@", [SetCard rankStrings][self.rank], self.symbol, self.color, self.shading];
 }
 
 #define SET_FOUND 4
@@ -64,8 +64,8 @@
         SetCard *otherCard1 = otherCards[0];
         SetCard *otherCard2 = otherCards[1];
         
-        BOOL numbersEqual = self.number == otherCard1.number && self.number == otherCard2.number ? YES : NO;
-        BOOL numbersDiffer = self.number != otherCard1.number && self.number != otherCard2.number && otherCard1.number != otherCard2.number ? YES : NO;
+        BOOL ranksEqual = self.rank == otherCard1.rank && self.rank == otherCard2.rank ? YES : NO;
+        BOOL ranksDiffer = self.rank != otherCard1.rank && self.rank != otherCard2.rank && otherCard1.rank != otherCard2.rank ? YES : NO;
         BOOL colorsEqual = [self.color isEqualToString:otherCard1.color] && [self.color isEqualToString:otherCard2.color] ? YES : NO;
         BOOL colorsDiffer = ![self.color isEqualToString:otherCard1.color] && ![self.color isEqualToString:otherCard2.color] && ![otherCard1.color isEqualToString:otherCard2.color] ? YES : NO;
         BOOL symbolsEqual = [self.symbol isEqualToString:otherCard1.symbol] && [self.symbol isEqualToString:otherCard2.symbol] ? YES : NO;
@@ -73,7 +73,7 @@
         BOOL shadingsEqual = [self.shading isEqualToString:otherCard1.shading] && [self.shading isEqualToString:otherCard2.shading] ? YES : NO;
         BOOL shadingsDiffer = ![self.shading isEqualToString:otherCard1.shading] && ![self.shading isEqualToString:otherCard2.shading] && ![otherCard1.shading isEqualToString:otherCard2.shading] ? YES : NO;
 
-        if ((numbersEqual || numbersDiffer) && (colorsEqual || colorsDiffer) && (symbolsEqual || symbolsDiffer) && (shadingsEqual || shadingsDiffer)) {
+        if ((ranksEqual || ranksDiffer) && (colorsEqual || colorsDiffer) && (symbolsEqual || symbolsDiffer) && (shadingsEqual || shadingsDiffer)) {
             score += SET_FOUND;
         }
     }
@@ -81,11 +81,11 @@
     return score;
 }
 
-+ (NSUInteger) maxNumber {
-    return [SetCard numberStrings].count-1;
++ (NSUInteger) maxRank {
+    return [SetCard rankStrings].count-1;
 }
 
-+ (NSArray *) numberStrings {
++ (NSArray *) rankStrings {
     return @[@"?", @"1", @"2", @"3"];
 }
 

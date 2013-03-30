@@ -6,17 +6,17 @@
 //  Copyright (c) 2013 David Eleazar García Santiago. All rights reserved.
 //
 
-#import "SetGameViewController.h"
-#import "CardSetGame.h"
+#import "SetCardGameViewController.h"
+#import "SetCardGame.h"
 #import "SetCardDeck.h"
 
-@interface SetGameViewController ()
-@property (strong, nonatomic) CardSetGame *game;
+@interface SetCardGameViewController ()
+@property (strong, nonatomic) SetCardGame *game;
 @property (nonatomic, strong) NSDictionary *colors;
 @property (nonatomic, strong) NSDictionary *shadings;
 @end
 
-@implementation SetGameViewController
+@implementation SetCardGameViewController
 
 #define FONT_SIZE 13
 #define STROKE_WIDTH -5
@@ -26,7 +26,7 @@
 
 - (CardGame *) game {
     if (!_game) {
-        _game = [[CardSetGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[SetCardDeck alloc] init]];
+        _game = [[SetCardGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[SetCardDeck alloc] init]];
     }
     
     return _game;
