@@ -7,7 +7,8 @@
 //
 
 #import "CardGame.h"
+#import "SetCardDeck.h"
 
 @interface SetCardGame : CardGame
-
+- (void) addCardUsingDeck:(SetCardDeck *)deck;
 @end

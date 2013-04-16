@@ -8,11 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "GameResult.h"
+#import "CardGame.h"
+#import "CardCollectionViewCell.h"
 
 @interface CardGameViewController : UIViewController
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+@property (weak, nonatomic) IBOutlet UICollectionView *cardCollectionView;
 @property (weak, nonatomic) IBOutlet UILabel *scoresLabel;
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lastFlipLabel;
 @property (strong, nonatomic) GameResult *gameResult;
+@property (strong, nonatomic) CardGame *game;
+@property (nonatomic) NSInteger startingCardCount;
+@property (nonatomic) int flipCount;
+- (Deck *) createDeck; // abstract
+- (void) updateCell:(CardCollectionViewCell *)cell usingCard:(Card *)card; // abstract
 @end

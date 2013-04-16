@@ -62,4 +62,12 @@
     }
 }
 
+- (void) addCardUsingDeck:(SetCardDeck *)deck {
+    Card *card = [deck drawRamdonCard];
+    
+    if (card) {
+        [self.cards addObject:card];
+    }
+}
+
 @end

@@ -9,119 +9,97 @@
 #import "SetCardGameViewController.h"
 #import "SetCardGame.h"
 #import "SetCardDeck.h"
+#import "SetCardView.h"
+#import "SetCard.h"
 
 @interface SetCardGameViewController ()
-@property (strong, nonatomic) SetCardGame *game;
 @property (nonatomic, strong) NSDictionary *colors;
 @property (nonatomic, strong) NSDictionary *shadings;
+@property (nonatomic, strong) SetCardDeck *deck;
+@property (weak, nonatomic) IBOutlet UIButton *threeMoreCardsButton;
 @end
 
 @implementation SetCardGameViewController
 
-#define FONT_SIZE 13
-#define STROKE_WIDTH -5
-#define SOLID_SHADING 1.0
-#define STRIPPED_SHADING 0.5
-#define OPEN_SHADING 0
-
-- (CardGame *) game {
-    if (!_game) {
-        _game = [[SetCardGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[SetCardDeck alloc] init]];
+- (SetCardDeck *) deck {
+    if (!_deck) {
+        _deck = [[SetCardDeck alloc] init];
     }
     
-    return _game;
+    return _deck;
 }
 
-- (NSDictionary *) colors {
-    return @{@"red" : [UIColor redColor], @"green" : [UIColor greenColor], @"blue" : [UIColor blueColor]};
-}
-
-- (UIColor *) color:(NSString *)color {
-    return [self colors][color];
-}
-
-- (UIColor *) color:(NSString *)color withShading:(NSString *)shading {
-    return [[self color:color] colorWithAlphaComponent:[self shading:shading]];
-}
-
-- (CGFloat) shading:(NSString *)shading {
-    return [[self shadings][shading] floatValue];
-}
-
-- (NSDictionary *) shadings {
-    return @{@"solid" : @SOLID_SHADING, @"stripped" : @STRIPPED_SHADING, @"open" : @OPEN_SHADING};
-}
-
-- (NSAttributedString *) formatCardName:(NSString *)unformattedCardName {
-    NSArray *chunks = [unformattedCardName componentsSeparatedByString: @"|"];
-    NSUInteger number = [chunks[0] intValue];
-    NSString *symbol = chunks[1];
-    NSString *color = chunks[2];
-    NSString *shading = chunks[3];
-    NSString *cardName = @"";
-    
-    for (int i=0; i<number; i++) {
-        cardName = [cardName stringByAppendingString:symbol];
+- (Deck *) createDeck {
+    if ([self.deck numberOfCardsInDeck] == 0) {
+        self.deck = nil;
     }
     
-    return [[NSAttributedString alloc] initWithString:cardName
-                                           attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:FONT_SIZE],
-                      NSForegroundColorAttributeName : [self color:color withShading:shading],
-                           NSStrokeColorAttributeName: [self color:color],
-                          NSStrokeWidthAttributeName : @STROKE_WIDTH}];
+    return self.deck;
+}
+
+- (NSInteger) startingCardCount {
+    return 12;
+}
+
+- (void) updateCell:(CardCollectionViewCell *)cell usingCard:(Card *)card {
+    if ([card isKindOfClass:[SetCard class]]) {
+        SetCard *setCard = (SetCard *) card;
+        
+        if ([cell.cardView isKindOfClass:[SetCardView class]]) {
+            SetCardView *setCardView = (SetCardView *) cell.cardView;
+            setCardView.rank = setCard.rank;
+            setCardView.symbol = setCard.symbol;
+            setCardView.shading = setCard.shading;
+            setCardView.color = setCard.color;
+            setCardView.faceUp = setCard.faceUp;
+            setCardView.alpha = setCard.faceUp ? 0.5 : 1.0;
+        }
+    }
+}
+
+- (IBAction)threeMoreCards:(UIButton *)sender {
+    if ([self.game isKindOfClass:[SetCardGame class]]) {
+        NSUInteger cardsCount = [self.game.cards count];
+        SetCardGame *setCardGame = (SetCardGame *) self.game;
+        
+        if (setCardGame) {
+            for (int index=0; index<3; index++) {
+                [setCardGame addCardUsingDeck:self.deck];
+            }
+        }
+        
+        NSMutableArray *arrayWithIndexPaths = [NSMutableArray array];
+        
+        for (int i=cardsCount; i<cardsCount+3; i++)
+            [arrayWithIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+        
+        [self.cardCollectionView insertItemsAtIndexPaths:arrayWithIndexPaths];
+        [self updateUI];
+    }
 }
 
 - (void) updateUI {
-    for (UIButton *cardButton in self.cardButtons) {
-        Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
-        NSAttributedString *cardNameAttributedString = [self formatCardName:[card contents]];
-        [cardButton setAttributedTitle:cardNameAttributedString forState:UIControlStateNormal];
-        [cardButton setAttributedTitle:cardNameAttributedString forState:UIControlStateSelected];
-        [cardButton setAttributedTitle:cardNameAttributedString forState:UIControlStateSelected|UIControlStateDisabled];
-        cardButton.selected = card.isFaceUp;
-        cardButton.enabled = !card.isUnplayable;
+    NSMutableArray *indexesToDelete = [[NSMutableArray alloc] init];
+    
+    for (CardCollectionViewCell *cell in [self.cardCollectionView visibleCells]) {
+        NSIndexPath *indexPath = [self.cardCollectionView indexPathForCell:cell];
+        Card *card = [self.game cardAtIndex:indexPath.item];
         
-        if (card.isFaceUp) {
-            cardButton.alpha = card.isUnplayable ? 0 : 0.6;
+        if (card.isUnplayable) {
+            [indexesToDelete addObject:indexPath];
         } else {
-            cardButton.alpha = 1.0;
+            [self updateCell:cell usingCard:card];
         }
     }
     
-    NSMutableAttributedString *matchingString = [[NSMutableAttributedString alloc] initWithString:@"Last flip: "
-                                                                                       attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:FONT_SIZE]}];
-    
-    if (self.game.cardsPlayed) {
-        if (self.game.cardsPlayed.count == 1) {
-            [matchingString appendAttributedString:[self formatCardName:[[self.game.cardsPlayed lastObject] contents]]];
-        } else {
-            if (self.game.cardsPlayed.count == 3) {
-                if (self.game.isMatched) {
-                    [matchingString appendAttributedString:[[NSAttributedString alloc] initWithString:@" Matched "
-                                                                                           attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:FONT_SIZE]}]];
-                    
-                    for (Card *card in self.game.cardsPlayed) {
-                        [matchingString appendAttributedString:[self formatCardName:[card contents]]];
-                    }
-                } else {
-                    [matchingString appendAttributedString:[[NSAttributedString alloc] initWithString:@" Didn't match "
-                                                                                           attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:FONT_SIZE]}]];
-                    
-                    for (Card *card in self.game.cardsPlayed) {
-                        [matchingString appendAttributedString:[self formatCardName:[card contents]]];
-                    }
-                }
-            } else {
-                for (Card *card in self.game.cardsPlayed) {
-                    [matchingString appendAttributedString:[self formatCardName:[card contents]]];
-                }
-            }
-            
-        }
+    if (self.game.isMatched) {
+        [self.game removeCards:[indexesToDelete copy]];
+        [self.cardCollectionView deleteItemsAtIndexPaths:indexesToDelete];
     }
     
-    self.lastFlipLabel.attributedText = [matchingString copy];
-    self.scoresLabel.text = [NSString stringWithFormat:@"Scores: %d", self.game.score];
+    self.threeMoreCardsButton.enabled = [self.deck numberOfCardsInDeck] < 3 ? NO : YES;
+    self.threeMoreCardsButton.alpha = [self.deck numberOfCardsInDeck] < 3 ? 0.3 : 1.0;
+    self.scoresLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
 @end

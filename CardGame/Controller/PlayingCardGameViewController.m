@@ -9,32 +9,41 @@
 #import "PlayingCardGameViewController.h"
 #import "PlayingCardGame.h"
 #import "PlayingCardDeck.h"
-
-@interface PlayingCardGameViewController ()
-@property (strong, nonatomic) PlayingCardGame *game;
-@end
+#import "PlayingCardView.h"
+#import "CardCollectionViewCell.h"
 
 @implementation PlayingCardGameViewController
 
-- (CardGame *) game {
-    if (!_game) {
-        _game = [[PlayingCardGame alloc] initWithCardCount:self.cardButtons.count usingDeck:[[PlayingCardDeck alloc] init]];
+- (Deck *) createDeck {
+    return [[PlayingCardDeck alloc] init];
+}
+
+- (NSInteger) startingCardCount {
+    return 20;
+}
+
+- (void) updateCell:(CardCollectionViewCell *)cell usingCard:(Card *)card {
+    if ([card isKindOfClass:[PlayingCard class]]) {
+        PlayingCard *playingCard = (PlayingCard *) card;
+        
+        if ([cell.cardView isKindOfClass:[PlayingCardView class]]) {
+            PlayingCardView *playingCardView = (PlayingCardView *) cell.cardView;
+            playingCardView.rank = playingCard.rank;
+            playingCardView.suit = playingCard.suit;
+            playingCardView.faceUp = playingCard.faceUp;
+            playingCardView.alpha = playingCard.isUnplayable ? 0.3 : 1.0;
+        }
     }
-    
-    return _game;
 }
 
 - (void) updateUI {
-    for (UIButton *cardButton in self.cardButtons) {
-        Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
-        [cardButton setTitle:[card contents] forState:UIControlStateSelected];
-        [cardButton setTitle:[card contents] forState:UIControlStateSelected|UIControlStateDisabled];
-        cardButton.selected = card.isFaceUp;
-        cardButton.enabled = !card.isUnplayable;
-        cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
+    for (CardCollectionViewCell *cell in [self.cardCollectionView visibleCells]) {
+        NSIndexPath *indexPath = [self.cardCollectionView indexPathForCell:cell];
+        Card *card = [self.game cardAtIndex:indexPath.item];
+        [self updateCell:cell usingCard:card];
     }
     
-    NSString *matchingString = @"Last flip: ";
+    NSString *matchingString = @"Last Flip: ";
     
     if (self.game.cardsPlayed) {
         if (self.game.cardsPlayed.count == 1) {
@@ -64,7 +73,7 @@
     }
     
     self.lastFlipLabel.text = matchingString;
-    self.scoresLabel.text = [NSString stringWithFormat:@"Scores: %d", self.game.score];
+    self.scoresLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
 @end

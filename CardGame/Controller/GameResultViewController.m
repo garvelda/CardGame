@@ -8,7 +8,7 @@
 
 #import "GameResultViewController.h"
 
-@interface GameResultViewController ()
+@interface GameResultViewController () <UICollectionViewDataSource>
 @property (nonatomic) SEL sortSelector;
 @end
 

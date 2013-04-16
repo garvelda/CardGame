@@ -49,4 +49,19 @@
     return index > self.cards.count ? nil : self.cards[index];
 }
 
+- (void) removeCards:(NSArray *)indexesToDelete {
+    NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
+    
+    for (id indexToDelete in indexesToDelete) {
+        if ([indexToDelete isKindOfClass:[NSIndexPath class]]) {
+            NSIndexPath *index = (NSIndexPath *) indexToDelete;
+            [indexSet addIndex:index.item];
+        }
+    }
+    
+    if (indexSet.count > 0) {
+        [self.cards removeObjectsAtIndexes:[indexSet copy]];
+    }
+}
+
 @end

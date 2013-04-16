@@ -12,4 +12,5 @@
 @interface Deck : NSObject
 - (void) addcard:(Card *) card atTop:(BOOL) top;
 - (Card *) drawRamdonCard;
+- (NSUInteger) numberOfCardsInDeck;
 @end

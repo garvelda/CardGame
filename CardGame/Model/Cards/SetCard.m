@@ -8,6 +8,12 @@
 
 #import "SetCard.h"
 
+@interface SetCard()
++ (NSDictionary *) uiColors;
++ (NSDictionary *) shadings;
++ (CGFloat) floatShading:(NSString *)shading;
+@end
+
 @implementation SetCard
 
 @synthesize symbol = _symbol;
@@ -56,6 +62,9 @@
 
 #define SET_FOUND 4
 #define NUMBER_CARDS_IN_SET 3
+#define SOLID_SHADING 1.0
+#define STRIPPED_SHADING 0.3
+#define OPEN_SHADING 0
 
 - (int) match: (NSArray *) otherCards {
     int score = 0;
@@ -90,15 +99,35 @@
 }
 
 + (NSArray *) validSymbols {
-    return @[@"▲", @"■", @"●"];
+    return @[@"diamond", @"oval", @"squiggle"];
 }
 
 + (NSArray *) validColors {
-    return @[@"red", @"green", @"blue"];
+    return @[@"red", @"green", @"purple"];
 }
 
 + (NSArray *) validShadings {
     return @[@"solid", @"stripped", @"open"];
+}
+
++ (UIColor *) uiColor:(NSString *)color {
+    return [SetCard uiColors][color];
+}
+
++ (UIColor *) uiColor:(NSString *)color withShading:(NSString *)shading {
+    return [[SetCard uiColor:color] colorWithAlphaComponent:[self floatShading:shading]];
+}
+
++ (NSDictionary *) uiColors {
+    return @{@"red" : [UIColor redColor], @"green" : [UIColor greenColor], @"purple" : [UIColor purpleColor]};
+}
+
++ (CGFloat) floatShading:(NSString *)shading {
+    return [[SetCard shadings][shading] floatValue];
+}
+
++ (NSDictionary *) shadings {
+    return @{@"solid" : @SOLID_SHADING, @"stripped" : @STRIPPED_SHADING, @"open" : @OPEN_SHADING};
 }
 
 @end

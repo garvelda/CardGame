@@ -17,4 +17,6 @@
 + (NSArray *) validSymbols;
 + (NSArray *) validColors;
 + (NSArray *) validShadings;
++ (UIColor *) uiColor:(NSString *)color;
++ (UIColor *) uiColor:(NSString *)color withShading:(NSString *)shading;
 @end

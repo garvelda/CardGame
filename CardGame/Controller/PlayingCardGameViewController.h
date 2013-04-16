@@ -10,4 +10,5 @@
 #import "CardGameViewController.h"
 
 @interface PlayingCardGameViewController : CardGameViewController
+@property (strong, nonatomic) CardGame *game;
 @end

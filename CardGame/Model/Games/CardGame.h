@@ -14,6 +14,7 @@
 - (id) initWithCardCount:(NSUInteger)count usingDeck:(Deck*) deck;
 - (void) flipCardAtIndex:(NSUInteger)index;
 - (Card *) cardAtIndex:(NSUInteger)index;
+- (void) removeCards:(NSArray *)cards;
 @property (nonatomic, strong) NSMutableArray *cards;
 @property (nonatomic, readonly) NSArray *cardsPlayed;
 @property (nonatomic, readonly, getter=isMatched) BOOL matched;
